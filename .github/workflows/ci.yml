@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+        env:
+          VITE_CLERK_PUBLISHABLE_KEY: pk_test_placeholder
+          VITE_API_URL: http://localhost:3001
+          DATABASE_URL: postgresql://user:pass@localhost:5432/test
+          CLERK_SECRET_KEY: sk_test_placeholder
+          CLERK_PUBLISHABLE_KEY: pk_test_placeholder
+          ANTHROPIC_API_KEY: sk-ant-placeholder
+          NODE_ENV: test
+          PORT: 3001
+          CORS_ORIGIN: http://localhost:5173
